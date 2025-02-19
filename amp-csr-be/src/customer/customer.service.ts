@@ -34,8 +34,18 @@ export class CustomerService {
     });
   }
 
-  async findOne(id: string): Promise<Customer> {
-    return await this.customerRepo.findOneByOrFail({ id: id });
+  async findOneNoRelations(id: string): Promise<Customer> {
+    return await this.customerRepo.findOneOrFail({
+      where: { id: id },
+      relations: { vehicles: false, purchases: false },
+    });
+  }
+
+  async findOneWithRelations(id: string): Promise<Customer> {
+    return await this.customerRepo.findOneOrFail({
+      where: { id: id },
+      relations: { vehicles: true, purchases: true },
+    });
   }
 
   async update(
@@ -49,9 +59,9 @@ export class CustomerService {
   }
 
   async remove(id: string): Promise<string> {
-    console.log('Here');
     const customer = await this.customerRepo.findOneByOrFail({ id: id });
-    await this.customerRepo.delete(customer);
+    console.log(customer);
+    await this.customerRepo.remove(customer);
     return `Customer ${customer.first_name} ${customer.last_name} deleted successfully`;
   }
 }

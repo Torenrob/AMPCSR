@@ -29,9 +29,15 @@ export default class Purchase {
   @Column({ type: 'text', enum: PurchaseType })
   purchase_type: PurchaseType;
 
-  @ManyToOne(() => Customer, (Customer) => Customer.purchases)
+  @ManyToOne(() => Customer, (Customer) => Customer.purchases, {
+    onDelete: 'CASCADE',
+    nullable: false,
+  })
   customer: Customer;
 
-  @ManyToOne(() => Vehicle, (Vehicle) => Vehicle.purchases)
+  @ManyToOne(() => Vehicle, (Vehicle) => Vehicle.purchases, {
+    onDelete: 'CASCADE',
+    nullable: true,
+  })
   vehicle: Vehicle;
 }

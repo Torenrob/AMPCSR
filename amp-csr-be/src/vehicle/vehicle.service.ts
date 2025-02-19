@@ -3,15 +3,23 @@ import CreateEditVehicleDto from './dto/create-vehicle.dto';
 import Vehicle from './entities/vehicle.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { CustomerService } from 'src/customer/customer.service';
 
 @Injectable()
 export class VehicleService {
   constructor(
     @InjectRepository(Vehicle)
     private vehicleRepo: Repository<Vehicle>,
+    private customerService: CustomerService,
   ) {}
 
   async create(createVehicleDto: CreateEditVehicleDto): Promise<Vehicle> {
+    const customer = await this.customerService.findOneNoRelations(
+      createVehicleDto.customerId,
+    );
+
+    createVehicleDto.customer = customer;
+
     const newVehicle: Vehicle = this.vehicleRepo.create(createVehicleDto);
     await this.vehicleRepo.save(newVehicle);
     return newVehicle;
@@ -21,8 +29,18 @@ export class VehicleService {
     return await this.vehicleRepo.find();
   }
 
-  async findOne(id: string): Promise<Vehicle> {
-    return await this.vehicleRepo.findOneByOrFail({ id });
+  async findOneNoRelations(id: string): Promise<Vehicle> {
+    return await this.vehicleRepo.findOneOrFail({
+      where: { id: id },
+      relations: { customer: false, purchases: false },
+    });
+  }
+
+  async findOneWithRelations(id: string): Promise<Vehicle> {
+    return await this.vehicleRepo.findOneOrFail({
+      where: { id: id },
+      relations: { customer: true, purchases: true },
+    });
   }
 
   async update(
@@ -42,7 +60,7 @@ export class VehicleService {
 
   async remove(id: string): Promise<string> {
     const vehicle: Vehicle = await this.vehicleRepo.findOneByOrFail({ id });
-    await this.vehicleRepo.delete(vehicle);
+    await this.vehicleRepo.remove(vehicle);
     return `Vehicle successfully deleted`;
   }
 }

@@ -3,15 +3,29 @@ import CreateEditPurchaseDto from './dto/create-purchase.dto';
 import Purchase from './entities/purchase.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { CustomerService } from 'src/customer/customer.service';
+import { VehicleService } from 'src/vehicle/vehicle.service';
 
 @Injectable()
 export class PurchaseService {
   constructor(
     @InjectRepository(Purchase)
     private purchaseRepo: Repository<Purchase>,
+    private customerService: CustomerService,
+    private vehicleService: VehicleService,
   ) {}
 
   async create(createPurchaseDto: CreateEditPurchaseDto): Promise<Purchase> {
+    const customer = await this.customerService.findOneNoRelations(
+      createPurchaseDto.customerId,
+    );
+    const vehicle = await this.vehicleService.findOneNoRelations(
+      createPurchaseDto.vehicleId,
+    );
+
+    createPurchaseDto.vehicle = vehicle;
+    createPurchaseDto.customer = customer;
+
     const newPurchase: Purchase = this.purchaseRepo.create(createPurchaseDto);
     await this.purchaseRepo.save(newPurchase);
     return newPurchase;
@@ -21,8 +35,18 @@ export class PurchaseService {
     return await this.purchaseRepo.find();
   }
 
-  async findOne(id: string): Promise<Purchase> {
-    return await this.purchaseRepo.findOneByOrFail({ id });
+  async findOneNoRelations(id: string): Promise<Purchase> {
+    return await this.purchaseRepo.findOneOrFail({
+      where: { id: id },
+      relations: { vehicle: false, customer: false },
+    });
+  }
+
+  async findOneWithRelations(id: string): Promise<Purchase> {
+    return await this.purchaseRepo.findOneOrFail({
+      where: { id: id },
+      relations: { vehicle: true, customer: true },
+    });
   }
 
   async update(
@@ -42,7 +66,7 @@ export class PurchaseService {
 
   async remove(id: string): Promise<string> {
     const purchase: Purchase = await this.purchaseRepo.findOneByOrFail({ id });
-    await this.purchaseRepo.delete(purchase);
+    await this.purchaseRepo.remove(purchase);
     return `Purchase successfully deleted`;
   }
 }

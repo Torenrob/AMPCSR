@@ -26,7 +26,7 @@ export class PurchaseController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.purchaseService.findOne(id);
+    return this.purchaseService.findOneWithRelations(id);
   }
 
   @Patch(':id')
