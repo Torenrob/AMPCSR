@@ -7,10 +7,11 @@ import { CustomerService } from 'src/customer/customer.service';
 import { VehicleService } from 'src/vehicle/vehicle.service';
 import Customer from 'src/customer/entities/customer.entity';
 import Vehicle from 'src/vehicle/entities/vehicle.entity';
+import { JwtService } from '@nestjs/jwt';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Purchase, Customer, Vehicle])],
   controllers: [PurchaseController],
-  providers: [PurchaseService, CustomerService, VehicleService],
+  providers: [PurchaseService, CustomerService, VehicleService, JwtService],
 })
 export class PurchaseModule {}

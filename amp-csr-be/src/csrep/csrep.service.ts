@@ -16,9 +16,7 @@ export class CsrepService {
     private appService: AppService,
   ) {}
 
-  async create(
-    createCsrepDto: CreateEditCsrepDto,
-  ): Promise<ValidCsRepDto | undefined> {
+  async create(createCsrepDto: CreateEditCsrepDto): Promise<ValidCsRepDto> {
     const newCsRep: Csrep = this.csRepRepo.create(createCsrepDto);
 
     await this.csRepRepo.save(newCsRep);
@@ -59,10 +57,10 @@ export class CsrepService {
   async update(
     id: string,
     updateCsrepDto: CreateEditCsrepDto,
-  ): Promise<ValidCsRepDto | undefined> {
+  ): Promise<ValidCsRepDto | string> {
     const csRep = await this.csRepRepo.findOneByOrFail({ employeeId: id });
     if (!csRep) {
-      throw new Error('CSR not found');
+      return 'Customer Service Representative not found';
     }
 
     updateCsrepDto.password = await EncryptionService.getPassHash(
@@ -80,6 +78,9 @@ export class CsrepService {
     const csRep: Csrep = await this.csRepRepo.findOneByOrFail({
       employeeId: id,
     });
+
+    if (!csRep) return 'Customer Service Representative not found';
+
     await this.csRepRepo.delete(csRep);
     return `Customer Service Representative Account successfully deleted`;
   }

@@ -6,10 +6,13 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
 import { PurchaseService } from './purchase.service';
 import CreateEditPurchaseDto from './dto/create-purchase.dto';
+import AuthGuard from 'src/auth/auth.guard';
 
+@UseGuards(AuthGuard)
 @Controller('purchase')
 export class PurchaseController {
   constructor(private readonly purchaseService: PurchaseService) {}

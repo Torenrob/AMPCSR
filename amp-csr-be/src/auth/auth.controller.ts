@@ -8,16 +8,12 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('register')
-  create(
-    @Body() createCsrepDto: CreateEditCsrepDto,
-  ): Promise<ValidCsRepDto | undefined> {
-    console.log('Hitter');
+  create(@Body() createCsrepDto: CreateEditCsrepDto): Promise<ValidCsRepDto> {
     return this.authService.register(createCsrepDto);
   }
 
   @Get('login')
-  login(@Body() csRepSignIn: CsRepSignIn): Promise<ValidCsRepDto | string> {
-    console.log('Hitting it');
+  login(@Body() csRepSignIn: CsRepSignIn): Promise<ValidCsRepDto> {
     return this.authService.signIn(csRepSignIn);
   }
 }

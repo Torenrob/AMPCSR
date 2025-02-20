@@ -13,4 +13,12 @@ export class AppService {
     }
     return pass;
   }
+
+  async getJwtSecretKey(): Promise<string> {
+    const key: string | undefined = this.config.get<string>('JWT_SECRET');
+    if (!key) {
+      throw new Error('JWT Secret Key environment variable not present');
+    }
+    return key;
+  }
 }
