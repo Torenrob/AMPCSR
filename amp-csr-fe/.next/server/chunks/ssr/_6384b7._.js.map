@@ -1,9 +1,0 @@
-{
-  "version": 3,
-  "sources": [],
-  "sections": [
-    {"offset": {"line": 7, "column": 0}, "map": {"version":3,"sources":["file:///home/toren/trc/git-repos/myProjects/AMPCSR/amp-csr-fe/src/app/page.tsx"],"sourcesContent":["import { Switch } from \"@radix-ui/react-switch\";\nimport { z } from \"zod\";\n\nconst loginSchema = z.object({\n\tuser_name: z.string(),\n\tpassword: z.string(),\n});\n\nconst registerSchema = z.object({\n\tfirst_name: z.string(),\n\tlast_name: z.string(),\n\tuser_name: z.string(),\n\tpassword: z.string(),\n});\n\nexport default function LandingPage() {\n\treturn (\n\t\t<div className=\"flex w-full justify-between\">\n\t\t\t<div className=\"flex max-w-[50%] min-h-fit pl-4 pt-4 items-baseline\">\n\t\t\t\t<img src=\"/AMPLogo.png\" alt=\"AMP Logo\" className=\"max-w-[15%] min-w-[15%]\" />\n\t\t\t\t<span className=\"text-xl font-bold w-fit\">Customer Service Portal</span>\n\t\t\t</div>\n\t\t\t<Switch id=\"darkLightMode\" className=\"self-center mr-20\" />\n\t\t</div>\n\t);\n}\n"],"names":[],"mappings":";;;;AACA;AADA;;;;AAGA,MAAM,cAAc,oIAAA,CAAA,IAAC,CAAC,MAAM,CAAC;IAC5B,WAAW,oIAAA,CAAA,IAAC,CAAC,MAAM;IACnB,UAAU,oIAAA,CAAA,IAAC,CAAC,MAAM;AACnB;AAEA,MAAM,iBAAiB,oIAAA,CAAA,IAAC,CAAC,MAAM,CAAC;IAC/B,YAAY,oIAAA,CAAA,IAAC,CAAC,MAAM;IACpB,WAAW,oIAAA,CAAA,IAAC,CAAC,MAAM;IACnB,WAAW,oIAAA,CAAA,IAAC,CAAC,MAAM;IACnB,UAAU,oIAAA,CAAA,IAAC,CAAC,MAAM;AACnB;AAEe,SAAS;IACvB,qBACC,8OAAC;QAAI,WAAU;;0BACd,8OAAC;gBAAI,WAAU;;kCACd,8OAAC;wBAAI,KAAI;wBAAe,KAAI;wBAAW,WAAU;;;;;;kCACjD,8OAAC;wBAAK,WAAU;kCAA0B;;;;;;;;;;;;0BAE3C,8OAAC,kKAAA,CAAA,SAAM;gBAAC,IAAG;gBAAgB,WAAU;;;;;;;;;;;;AAGxC"}},
-    {"offset": {"line": 71, "column": 0}, "map": {"version":3,"sources":[],"names":[],"mappings":"A"}},
-    {"offset": {"line": 82, "column": 0}, "map": {"version":3,"sources":[],"names":[],"mappings":""}},
-    {"offset": {"line": 82, "column": 0}, "map": {"version":3,"sources":[],"names":[],"mappings":"A"}}]
-}
