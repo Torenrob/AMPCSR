@@ -12,7 +12,7 @@ export class AuthController {
     return this.authService.register(createCsrepDto);
   }
 
-  @Get('login')
+  @Post('login')
   login(@Body() csRepSignIn: CsRepSignIn): Promise<ValidCsRepDto> {
     return this.authService.signIn(csRepSignIn);
   }
