@@ -8,7 +8,7 @@ export default function LandingPage() {
 	const [showLoginRegister, setShowLoginRegister] = useState(true);
 
 	return (
-		<div className="flex h-full wi-full bg-background justify-center items-center">
+		<div className="flex w-full h-full justify-center items-center">
 			{showLoginRegister ? <LoginForm showRegister={() => setShowLoginRegister(false)} /> : <RegisterForm showLogin={() => setShowLoginRegister(true)} />}
 		</div>
 	);
