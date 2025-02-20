@@ -1,11 +1,15 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import React, { useContext } from "react";
+import React from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Form, FormDescription, FormField, FormItem } from "../shadcn/form";
 import { FloatingLabelInput } from "../shadcn/floatinglabelinput";
 import { Button } from "../shadcn/button";
-import { CSREP_CONTEXT } from "@/app/auth/repcontext";
+import { validCSREP, registerCredentials, registerCSREP } from "@/services/api/auth";
+import { UseMutationResult, useMutation } from "@tanstack/react-query";
+import { Spinner } from "../shadcn/spinner";
+import { useRouter } from "next/navigation";
+import { setTokenHeader, setValidRepCookies } from "@/lib/utils";
 
 const registerSchema = z.object({
 	first_name: z.string(),
@@ -15,7 +19,17 @@ const registerSchema = z.object({
 });
 
 export default function RegisterForm({ showLogin }: { showLogin: () => void }) {
-	const { repRegisterMutation } = useContext(CSREP_CONTEXT);
+	const router = useRouter();
+
+	const repRegisterMutation: UseMutationResult<validCSREP, Error, registerCredentials, unknown> = useMutation({
+		mutationKey: ["register"],
+		mutationFn: registerCSREP,
+		onSuccess: (data) => {
+			setTokenHeader(data.token);
+			setValidRepCookies(data);
+			router.push("/home");
+		},
+	});
 
 	function onSubmit(values: z.infer<typeof registerSchema>) {
 		repRegisterMutation.mutateAsync(values);
@@ -33,15 +47,15 @@ export default function RegisterForm({ showLogin }: { showLogin: () => void }) {
 
 	return (
 		<Form {...form}>
-			<form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-2 bg-primary w-[20%] p-3 rounded-2xl h-fit shadow-gray-700 shadow-md">
-				<span className="self-center text-xl text-primary-foreground font-semibold">Register Employee</span>
+			<form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-2 bg-secondary w-[20%] p-3 rounded-2xl h-fit shadow-gray-700 shadow-md">
+				<span className="self-center text-xl text-primary font-semibold">Register Employee</span>
 
 				<FormField
 					control={form.control}
 					name="first_name"
 					render={({ field }) => (
 						<FormItem>
-							<FloatingLabelInput {...field} id="first_name" label="First Name" labelClassname="bg-primary rounded-3xl" inputClassname="text-primary-foreground" />
+							<FloatingLabelInput {...field} id="first_name" label="First Name" labelClassname="bg-secondary rounded-3xl" inputClassname="text-primary border-primary" />
 						</FormItem>
 					)}
 				/>
@@ -51,7 +65,7 @@ export default function RegisterForm({ showLogin }: { showLogin: () => void }) {
 					name="last_name"
 					render={({ field }) => (
 						<FormItem>
-							<FloatingLabelInput {...field} id="last_name" label="Last Name" labelClassname="bg-primary rounded-3xl" inputClassname="text-primary-foreground" />
+							<FloatingLabelInput {...field} id="last_name" label="Last Name" labelClassname="bg-secondary rounded-3xl" inputClassname="text-primary border-primary" />
 						</FormItem>
 					)}
 				/>
@@ -61,7 +75,7 @@ export default function RegisterForm({ showLogin }: { showLogin: () => void }) {
 					name="user_name"
 					render={({ field }) => (
 						<FormItem>
-							<FloatingLabelInput {...field} id="user_name" label="Username" labelClassname="bg-primary rounded-3xl" inputClassname="text-primary-foreground" />
+							<FloatingLabelInput {...field} id="user_name" label="Username" labelClassname="bg-secondary rounded-3xl" inputClassname="text-primary border-primary" />
 						</FormItem>
 					)}
 				/>
@@ -71,16 +85,16 @@ export default function RegisterForm({ showLogin }: { showLogin: () => void }) {
 					name="password"
 					render={({ field }) => (
 						<FormItem>
-							<FloatingLabelInput {...field} id="password" label="Password" labelClassname="bg-primary rounded-3xl" inputClassname="text-primary-foreground" />
+							<FloatingLabelInput {...field} type="password" id="password" label="Password" labelClassname="bg-secondary rounded-3xl" inputClassname="text-primary border-primary" />
 						</FormItem>
 					)}
 				/>
 
-				<Button type="submit" className="w-[30%] self-center bg-background text-foreground">
-					Submit
+				<Button type="submit" className="w-[30%] self-center bg-primary text-primary-foreground">
+					{repRegisterMutation.isPending ? <Spinner size="small" /> : "Submit"}
 				</Button>
 
-				<FormDescription className="text-center border-t-[0.075rem] border-background/25 pt-2 mx-1">
+				<FormDescription className="text-center ">
 					Already have an account?{" "}
 					<a onClick={showLogin} className="text-input-foreground font-semibold cursor-pointer">
 						Login

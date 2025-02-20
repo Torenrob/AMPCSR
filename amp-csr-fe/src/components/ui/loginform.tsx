@@ -1,13 +1,15 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import React, { useContext } from "react";
+import React from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Form, FormDescription, FormField, FormItem } from "../shadcn/form";
 import { FloatingLabelInput } from "../shadcn/floatinglabelinput";
 import { Button } from "../shadcn/button";
-import { CSREP_CONTEXT } from "@/app/auth/repcontext";
 import { Spinner } from "../shadcn/spinner";
-import { useMutationState } from "@tanstack/react-query";
+import { validCSREP, loginCredentials, loginCSREP } from "@/services/api/auth";
+import { UseMutationResult, useMutation } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
+import { setTokenHeader, setValidRepCookies } from "@/lib/utils";
 
 const loginSchema = z.object({
 	user_name: z.string(),
@@ -15,14 +17,17 @@ const loginSchema = z.object({
 });
 
 export default function LoginForm({ showRegister }: { showRegister: () => void }) {
-	const { repLoginMutation } = useContext(CSREP_CONTEXT);
+	const router = useRouter();
 
-	const loginState = useMutationState({
-		filters: { mutationKey: ["login"] },
-		select: (m) => m.state.status,
+	const repLoginMutation: UseMutationResult<validCSREP, Error, loginCredentials, unknown> = useMutation({
+		mutationKey: ["login"],
+		mutationFn: loginCSREP,
+		onSuccess: (data) => {
+			setTokenHeader(data.token);
+			setValidRepCookies(data);
+			router.push("/home");
+		},
 	});
-
-	console.log(loginState);
 
 	function onSubmit(values: z.infer<typeof loginSchema>) {
 		repLoginMutation.mutateAsync(values);
@@ -38,15 +43,15 @@ export default function LoginForm({ showRegister }: { showRegister: () => void }
 
 	return (
 		<Form {...form}>
-			<form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-2 bg-primary w-[20%] p-3 rounded-2xl h-fit shadow-gray-700 shadow-md">
-				<span className="self-center text-xl text-primary-foreground font-semibold">Employee Login</span>
+			<form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-2 bg-sidebar w-[20%] p-3 rounded-2xl h-fit shadow-gray-700 shadow-md">
+				<span className="self-center text-xl text-primary font-semibold">Employee Login</span>
 
 				<FormField
 					control={form.control}
 					name="user_name"
 					render={({ field }) => (
 						<FormItem>
-							<FloatingLabelInput {...field} id="user_name" label="Username" labelClassname="bg-primary rounded-3xl" inputClassname="text-primary-foreground" />
+							<FloatingLabelInput {...field} id="user_name" label="Username" labelClassname="bg-sidebar rounded-3xl" inputClassname="text-primary border-primary" />
 						</FormItem>
 					)}
 				/>
@@ -56,16 +61,16 @@ export default function LoginForm({ showRegister }: { showRegister: () => void }
 					name="password"
 					render={({ field }) => (
 						<FormItem>
-							<FloatingLabelInput {...field} id="password" label="Password" labelClassname="bg-primary rounded-3xl" inputClassname="text-primary-foreground" />
+							<FloatingLabelInput {...field} type="password" id="password" label="Password" labelClassname="bg-sidebar rounded-3xl" inputClassname="text-primary border-primary" />
 						</FormItem>
 					)}
 				/>
-				<Button type="submit" className="w-[30%] self-center bg-background text-foreground">
-					Submit
+				<Button type="submit" className="w-[30%] self-center bg-sidebar-ring text-primary-foreground">
+					{repLoginMutation.isPending ? <Spinner size="small" /> : "Submit"}
 				</Button>
-				<FormDescription className="text-center border-t-[0.075rem] border-background/25 pt-2 mx-1">
+				<FormDescription className="text-center">
 					Dont have an account?{" "}
-					<a onClick={showRegister} className="text-input-foreground font-semibold cursor-pointer">
+					<a onClick={showRegister} className="text-sidebar-ring font-semibold cursor-pointer">
 						Register
 					</a>
 				</FormDescription>

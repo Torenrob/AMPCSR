@@ -1,6 +1,6 @@
 import { UseMutationResult } from "@tanstack/react-query";
 import { createContext } from "react";
-import { loginCredentials, registerCredentials } from "../api/auth";
+import { loginCredentials, registerCredentials } from "../../services/api/auth";
 
 export type CSREP_context = {
 	repLoginMutation: UseMutationResult<CSREP, Error, loginCredentials, unknown>;
