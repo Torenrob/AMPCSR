@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import CreateEditPurchaseDto from './dto/create-purchase.dto';
-import Purchase from './entities/purchase.entity';
+import Purchase, { PurchaseType } from './entities/purchase.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CustomerService } from 'src/customer/customer.service';
@@ -32,7 +32,9 @@ export class PurchaseService {
   }
 
   async findAll(): Promise<Purchase[]> {
-    return await this.purchaseRepo.find();
+    return await this.purchaseRepo.find({
+      relations: { customer: true, vehicle: true },
+    });
   }
 
   async findOneNoRelations(id: string): Promise<Purchase> {
@@ -59,6 +61,11 @@ export class PurchaseService {
     }
 
     Object.assign(purchase, updatePurchaseDto);
+
+    purchase.vehicle = await this.vehicleService.findOneNoRelations(
+      updatePurchaseDto.vehicleId,
+    );
+
     await this.purchaseRepo.save(purchase);
 
     return purchase;

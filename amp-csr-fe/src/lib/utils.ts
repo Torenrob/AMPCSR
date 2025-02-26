@@ -8,6 +8,10 @@ export function cn(...inputs: ClassValue[]) {
 	return twMerge(clsx(inputs));
 }
 
+export type ExcludeProperty<T, K extends keyof T> = {
+	[P in Exclude<keyof T, K>]: T[P];
+};
+
 export function setTokenHeader(token: string) {
 	axios.defaults.headers.common["Authorization"] = "Bearer " + token;
 }

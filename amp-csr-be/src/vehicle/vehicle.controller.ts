@@ -11,6 +11,7 @@ import {
 import { VehicleService } from './vehicle.service';
 import CreateEditVehicleDto from './dto/create-vehicle.dto';
 import AuthGuard from 'src/auth/auth.guard';
+import Vehicle from './entities/vehicle.entity';
 
 @UseGuards(AuthGuard)
 @Controller('vehicle')
@@ -23,8 +24,10 @@ export class VehicleController {
   }
 
   @Get()
-  findAll() {
-    return this.vehicleService.findAll();
+  async findAll() {
+    const v: Vehicle[] = await this.vehicleService.findAll();
+
+    return v;
   }
 
   @Get(':id')

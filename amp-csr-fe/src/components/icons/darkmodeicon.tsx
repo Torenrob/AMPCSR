@@ -2,7 +2,7 @@ import React from "react";
 
 export default function DarkModeIcon() {
 	return (
-		<svg fill="#FFFFFF" className="w-[0.85rem] h-[0.85rem] relative left-[0.2rem]" viewBox="0 0 35 35" data-name="Layer 2" id="Layer_2" xmlns="http://www.w3.org/2000/svg" stroke="#FFFFFF">
+		<svg fill="#FFFFFF" className="w-[.675rem] h-[.675rem] relative left-[0.2rem]" viewBox="0 0 35 35" data-name="Layer 2" id="Layer_2" xmlns="http://www.w3.org/2000/svg" stroke="#FFFFFF">
 			<g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
 			<g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g>
 			<g id="SVGRepo_iconCarrier">

@@ -23,7 +23,6 @@ export type validCSREP = {
 };
 
 export const loginCSREP = async (credentials: loginCredentials): Promise<validCSREP> => {
-	console.log(process.env.NEXT_PUBLIC_API_URL);
 	const response: AxiosResponse<validCSREP> = await axios.post(apiURL + "/login", credentials);
 	return response.data;
 };

@@ -1,0 +1,11 @@
+div:has(#sidebar)[data-state="collapsed"] #sidebarTitleLine {
+	display: none;
+}
+
+div:has(#sidebar)[data-state="collapsed"] #logOutText {
+	display: none;
+}
+
+div:has(#sidebar)[data-state="collapsed"] #repLoginText {
+	display: none;
+}

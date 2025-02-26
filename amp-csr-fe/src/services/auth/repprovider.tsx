@@ -1,6 +1,6 @@
 "use client";
 
-import React, { ReactNode, useEffect, useState } from "react";
+import React, { Dispatch, ReactNode, SetStateAction, useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 import { setTokenHeader } from "@/lib/utils";
@@ -13,7 +13,12 @@ export type CSREP = {
 	user_name: string;
 };
 
-export const CSREP_CONTEXT = createContext<CSREP>({} as CSREP);
+export type CSREP_CONTEXT = {
+	rep: CSREP | null;
+	setRep: Dispatch<SetStateAction<CSREP | null>>;
+};
+
+export const CSREP_CONTEXT = createContext<CSREP_CONTEXT>({} as CSREP_CONTEXT);
 
 export default function UserProvider({ children }: Readonly<{ children: ReactNode }>) {
 	const [rep, setRep] = useState<CSREP | null>(null);
@@ -28,7 +33,8 @@ export default function UserProvider({ children }: Readonly<{ children: ReactNod
 
 		setTokenHeader(token);
 		setRep(JSON.parse(repInfo));
+		return router.push("/recent");
 	}, [setRep, router]);
 
-	return <CSREP_CONTEXT.Provider value={rep!}>{children}</CSREP_CONTEXT.Provider>;
+	return <CSREP_CONTEXT.Provider value={{ rep, setRep }}>{children}</CSREP_CONTEXT.Provider>;
 }

@@ -25,26 +25,12 @@ export default class Vehicle {
   @Column({ type: 'boolean', default: false })
   isSubscribed: boolean;
 
-  @Column({ type: 'datetime', nullable: true })
-  subscriptionStart: Date | null;
-
-  @Column({ type: 'datetime', nullable: true })
-  subscriptionEnd: Date | null;
-
   @ManyToOne(() => Customer, (Customer) => Customer.vehicles, {
     onDelete: 'CASCADE',
     nullable: false,
   })
   customer: Customer;
 
-  // @Column({
-  //   type: 'text',
-  //   default: '[]',
-  //   transformer: {
-  //     to: (value: Purchase[]) => JSON.stringify(value),
-  //     from: (value: string) => JSON.parse(value),
-  //   },
-  // })
   @OneToMany(() => Purchase, (Purchase) => Purchase.vehicle)
   purchases: Purchase[];
 }

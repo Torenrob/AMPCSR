@@ -2,9 +2,10 @@ import type { Metadata } from "next";
 import { Libre_Franklin } from "next/font/google";
 import "./globals.css";
 import { SidebarProvider, SidebarTrigger } from "@/components/shadcn/sidebar";
-import AppSideBar from "@/components/ui/appsidebar";
 import QueryProvider from "@/services/queryprovider";
 import DarkModeProvider from "@/services/darkmodeprovider";
+import UserProvider from "@/services/auth/repprovider";
+import AppSideBar from "./appsidebar";
 
 const libreFranklin = Libre_Franklin({
 	subsets: ["latin"],
@@ -25,13 +26,15 @@ export default function RootLayout({
 		<html lang="en">
 			<body className={`${libreFranklin.className} antialiased `}>
 				<QueryProvider>
-					<SidebarProvider>
-						<AppSideBar />
-						<DarkModeProvider>
-							<SidebarTrigger className="absolute text-sidebar-ring" />
-							<main className="grow">{children}</main>
-						</DarkModeProvider>
-					</SidebarProvider>
+					<UserProvider>
+						<SidebarProvider>
+							<AppSideBar />
+							<DarkModeProvider>
+								<SidebarTrigger className="absolute text-primary mt-2" />
+								<main className="grow flex">{children}</main>
+							</DarkModeProvider>
+						</SidebarProvider>
+					</UserProvider>
 				</QueryProvider>
 			</body>
 		</html>

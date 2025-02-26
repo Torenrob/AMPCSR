@@ -19,28 +19,9 @@ export default class Customer {
   @Column({ type: 'text', unique: true })
   phone: string;
 
-  @Column({ type: 'text' })
-  address: string;
-
-  // @Column({
-  //   type: 'text',
-  //   default: '[]',
-  //   transformer: {
-  //     to: (value: Vehicle[]) => JSON.stringify(value),
-  //     from: (value: string) => JSON.parse(value),
-  //   },
-  // })
   @OneToMany(() => Vehicle, (Vehicle) => Vehicle.customer)
   vehicles: Vehicle[];
 
-  // @Column({
-  //   type: 'text',
-  //   default: '[]',
-  //   transformer: {
-  //     to: (value: Purchase[]) => JSON.stringify(value),
-  //     from: (value: string) => JSON.parse(value),
-  //   },
-  // })
   @OneToMany(() => Purchase, (Purchase) => Purchase.customer)
   purchases: Purchase[];
 }

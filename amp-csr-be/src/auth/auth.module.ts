@@ -20,7 +20,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
         return {
           global: true,
           secret: secret,
-          signOptions: { expiresIn: '300s' },
+          signOptions: { noTimestamp: true },
         };
       },
       inject: [ConfigService],

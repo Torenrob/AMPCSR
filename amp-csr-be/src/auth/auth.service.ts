@@ -30,7 +30,10 @@ export default class AuthService {
       createCsrepDto.password,
       this.appService.getBcryptSecretKey(),
     );
+
+    console.log(createCsrepDto);
     const csrep: ValidCsRepDto = await this.csRepService.create(createCsrepDto);
+    console.log(csrep);
 
     csrep.token = await this.jwtService.signAsync({
       sub: csrep.employeeId,

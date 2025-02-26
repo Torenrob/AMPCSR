@@ -9,10 +9,10 @@ import {
 } from 'typeorm';
 
 export enum PurchaseType {
-  SUB = 'SUBSCRIPTION',
-  SINGWASH = 'SINGLE_WASH',
-  RFD = 'REFUND',
-  OTH = 'OTHER',
+  SUBSCRIPTION = 'SUBSCRIPTION',
+  SINGLE_WASH = 'SINGLE_WASH',
+  REFUND = 'REFUND',
+  OTHER = 'OTHER',
 }
 
 @Entity()

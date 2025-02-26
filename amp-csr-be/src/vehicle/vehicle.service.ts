@@ -26,7 +26,9 @@ export class VehicleService {
   }
 
   async findAll(): Promise<Vehicle[]> {
-    return await this.vehicleRepo.find();
+    return await this.vehicleRepo.find({
+      relations: { customer: true },
+    });
   }
 
   async findOneNoRelations(id: string): Promise<Vehicle> {

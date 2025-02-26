@@ -23,5 +23,5 @@ export default function DarkModeProvider({ children }: { children: ReactNode }) 
 
 	if (darkMode === null) return null;
 
-	return <div className={`${darkMode ? "dark" : ""} flex grow bg-background`}>{children} </div>;
+	return <div className={`${darkMode ? "dark" : ""} flex flex-col grow bg-accent`}>{children} </div>;
 }
