@@ -14,7 +14,6 @@ export default function Recent() {
 	const { data, isLoading } = useQuery({
 		queryKey: ["recentView"],
 		queryFn: (): Promise<RecentlyViewed[]> => {
-			console.log("Recent View Query Initialized");
 			return getAllRecentlyViewed(rep!.employeeId);
 		},
 	});

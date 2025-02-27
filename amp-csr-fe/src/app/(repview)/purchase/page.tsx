@@ -25,7 +25,6 @@ export default function Purchases() {
 	const { data, isPending, error } = useQuery({
 		queryKey: ["purchases"],
 		queryFn: () => {
-			console.log("Purchase Query Initialized");
 			return getAllPurchases();
 		},
 	});
