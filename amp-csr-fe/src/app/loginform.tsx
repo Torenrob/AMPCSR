@@ -22,7 +22,7 @@ export default function LoginForm({ showRegister }: { showRegister: () => void }
 	const router = useRouter();
 
 	const repLoginMutation: UseMutationResult<validCSREP, Error, loginCredentials, unknown> = useMutation({
-		mutationKey: ["login"],
+		mutationKey: ["login", 1],
 		mutationFn: loginCSREP,
 		onSuccess: (data) => {
 			setValidRepCookies(data);

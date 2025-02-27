@@ -5,7 +5,7 @@ import { z } from "zod";
 import { Form, FormDescription, FormField, FormItem } from "../components/shadcn/form";
 import { FloatingLabelInput } from "../components/shadcn/floatinglabelinput";
 import { Button } from "../components/shadcn/button";
-import { validCSREP, registerCredentials, registerCSREP } from "@/services/api/auth";
+import { validCSREP, registerCredentials, registerCSREP, loginCredentials, loginCSREP } from "@/services/api/auth";
 import { UseMutationResult, useMutation } from "@tanstack/react-query";
 import { Spinner } from "../components/shadcn/spinner";
 import { useRouter } from "next/navigation";
@@ -34,6 +34,22 @@ export default function RegisterForm({ showLogin }: { showLogin: () => void }) {
 			router.push("/recent");
 		},
 	});
+
+	const repLoginMutation: UseMutationResult<validCSREP, Error, loginCredentials, unknown> = useMutation({
+		mutationKey: ["login", 2],
+		mutationFn: loginCSREP,
+		onSuccess: (data) => {
+			setValidRepCookies(data);
+			const { token, ...rep } = data;
+			setTokenHeader(token);
+			setRep(rep);
+			router.push("/recent");
+		},
+	});
+
+	function loginTest() {
+		repLoginMutation.mutateAsync({ user_name: "TestAcct", password: "Tester77!" });
+	}
 
 	function onSubmit(values: z.infer<typeof registerSchema>) {
 		repRegisterMutation.mutateAsync(values);
@@ -98,11 +114,19 @@ export default function RegisterForm({ showLogin }: { showLogin: () => void }) {
 					{repRegisterMutation.isPending ? <Spinner size="small" /> : "Submit"}
 				</Button>
 
-				<FormDescription className="text-center">
-					Already have an account?{" "}
-					<a onClick={showLogin} className="text-sidebar-primary font-semibold cursor-pointer">
-						Login
-					</a>
+				<FormDescription className="text-center flex flex-col">
+					<span>
+						Already have an account?{" "}
+						<a onClick={showLogin} className="text-sidebar-ring font-semibold cursor-pointer">
+							Login
+						</a>
+					</span>
+					<span>
+						Or use a{" "}
+						<a onClick={loginTest} className="text-sidebar-ring font-semibold cursor-pointer">
+							Test Account
+						</a>
+					</span>
 				</FormDescription>
 			</form>
 		</Form>
