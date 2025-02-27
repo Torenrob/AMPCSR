@@ -11,6 +11,7 @@ import AddItemModal from "../additemmodal";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
 
 const regex = new RegExp(/^\d{4}$/);
 
@@ -24,6 +25,7 @@ const schema = z.object({
 
 export default function Vehicles() {
 	const queryClient = useQueryClient();
+	const [modalOpen, setModalOpen] = useState<boolean>(false);
 
 	const { data, isPending, error } = useQuery({
 		queryKey: ["vehicles"],
@@ -51,6 +53,7 @@ export default function Vehicles() {
 
 	const onSubmit = (formValues: z.infer<typeof schema>): void => {
 		mutation.mutateAsync(formValues);
+		setModalOpen(false);
 		form.reset();
 	};
 
@@ -67,7 +70,7 @@ export default function Vehicles() {
 		<>
 			<div className="flex w-full">
 				<div className="font-extrabold text-2xl mb-2">Vehicles</div>
-				<AddItemModal title="Add Vehicle" form={form} schema={schema} mutation={mutation} onSubmit={onSubmit} />
+				<AddItemModal title="Add Vehicle" setModalOpen={() => setModalOpen(!modalOpen)} open={modalOpen} form={form} schema={schema} mutation={mutation} onSubmit={onSubmit} />
 			</div>
 			<Separator className="w-full bg-sidebar-border mb-4" />
 			<div className="grow rounded-lg">

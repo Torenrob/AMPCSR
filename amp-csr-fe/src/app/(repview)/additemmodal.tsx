@@ -6,7 +6,7 @@ import { Form, FormField, FormItem, FormMessage } from "@/components/shadcn/form
 import { Spinner } from "@/components/shadcn/spinner";
 
 import { UseMutationResult } from "@tanstack/react-query";
-import React, { useState } from "react";
+import React from "react";
 import { UseFormReturn } from "react-hook-form";
 import { z } from "zod";
 import { SubscribeCheck } from "./vehicles/subscribecheck";
@@ -21,21 +21,23 @@ export default function AddItemModal({
 	mutation,
 	form,
 	schema,
+	open,
+	setModalOpen,
 }: {
 	title: string;
 	onSubmit: (values: z.infer<any>) => void;
 	mutation: UseMutationResult<any, Error, any, unknown>;
 	form: UseFormReturn<z.infer<any>>;
 	schema: z.ZodObject<any>;
+	open: boolean;
+	setModalOpen: () => void;
 }) {
-	const [open, setOpen] = useState(false);
-
 	const keys = Object.keys(schema.shape);
 
 	const selectedCustomer = form.watch("customerId");
 
 	return (
-		<Dialog open={open} onOpenChange={setOpen}>
+		<Dialog open={open} onOpenChange={setModalOpen}>
 			<DialogTrigger asChild>
 				<Button className="h-[60%] bg-primary ml-2 mt-1">{title === "Edit User" ? "Edit" : "Add"}</Button>
 			</DialogTrigger>
@@ -119,14 +121,7 @@ export default function AddItemModal({
 								</React.Fragment>
 							);
 						})}
-						<Button
-							type="submit"
-							onClick={() => {
-								if (form.formState.isValid) {
-									setOpen(false);
-								}
-							}}
-							className="w-[30%] self-center bg-sidebar-ring">
+						<Button type="submit" className="w-[30%] self-center bg-sidebar-ring">
 							{mutation.isPending ? <Spinner size="small" /> : "Submit"}
 						</Button>
 					</form>

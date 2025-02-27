@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { useMutation, UseMutationResult, useQuery, useQueryClient } from "@tanstack/react-query";
 import { DataTable } from "../data-table";
 import { Separator } from "@/components/shadcn/separator";
@@ -21,6 +21,7 @@ const schema = z.object({
 
 export default function Purchases() {
 	const queryClient = useQueryClient();
+	const [modalOpen, setModalOpen] = useState<boolean>(false);
 
 	const { data, isPending, error } = useQuery({
 		queryKey: ["purchases"],
@@ -48,6 +49,7 @@ export default function Purchases() {
 
 	const onSubmit = (formValues: z.infer<typeof schema>): void => {
 		mutation.mutateAsync({ ...formValues });
+		setModalOpen(false);
 		form.reset();
 	};
 
@@ -71,7 +73,7 @@ export default function Purchases() {
 		<>
 			<div className="flex w-full">
 				<div className="font-extrabold text-2xl mb-2">Purchase History</div>
-				<AddItemModal title="Add Transaction" form={form} schema={schema} mutation={mutation} onSubmit={onSubmit} />
+				<AddItemModal open={modalOpen} setModalOpen={() => setModalOpen(!modalOpen)} title="Add Transaction" form={form} schema={schema} mutation={mutation} onSubmit={onSubmit} />
 			</div>
 			<Separator className="w-full bg-sidebar-border mb-4" />
 			<div className="grow rounded-lg">

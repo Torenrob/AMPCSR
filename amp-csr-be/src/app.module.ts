@@ -23,7 +23,7 @@ import Vehicle from './vehicle/entities/vehicle.entity';
         return {
           type: 'better-sqlite3',
           database: configService.get<string>('DB_LOCATION'),
-          synchronize: true,
+          synchronize: configService.get<string>('DB_SYNCHRONIZE') === 'true',
           logging: true,
           entities: [Csrep, Customer, Purchase, Vehicle],
         };
