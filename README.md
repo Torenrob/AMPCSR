@@ -14,4 +14,4 @@ Welcome to the AMP Customer Service Rep Portal project! This is a full stack app
 - **Backend**: NestJS, TypeORM
 - **Database**: SQLite
 - **Authentication**: JWT (JSON Web Tokens)
-- **Deployment**: Docker Compose, HostingerVPS
+- **Deployment**: Docker, Caddy, HostingerVPS
