@@ -8,6 +8,10 @@ logs
 *.log
 *npm-debug.log*
 
+#docker
+*/Dockerfile
+docker-compose.yaml
+
 
 # OS
 .DS_Store

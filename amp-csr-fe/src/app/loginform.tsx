@@ -38,7 +38,7 @@ export default function LoginForm({ showRegister }: { showRegister: () => void }
 	}
 
 	function loginTest() {
-		repLoginMutation.mutateAsync({ user_name: "Test", password: "Tester77" });
+		repLoginMutation.mutateAsync({ user_name: "TestAcct", password: "Tester77!" });
 	}
 
 	const form = useForm<z.infer<typeof loginSchema>>({

@@ -18,7 +18,7 @@ import { CreateEditRecentView } from './dto/create-recentview.dto';
 import { Code } from 'typeorm';
 
 @UseGuards(AuthGuard)
-@Controller('csrep')
+@Controller('api/csrep')
 export class CsrepController {
   constructor(private readonly csrepService: CsrepService) {}
 

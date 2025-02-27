@@ -7,22 +7,28 @@ import { VehicleModule } from './vehicle/vehicle.module';
 import { PurchaseModule } from './purchase/purchase.module';
 import { AuthModule } from './auth/auth.module';
 import Csrep from './csrep/entities/csrep.entity';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import Customer from './customer/entities/customer.entity';
 import Purchase from './purchase/entities/purchase.entity';
 import Vehicle from './vehicle/entities/vehicle.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot({
-      type: 'better-sqlite3',
-      database: './src/database/ampcsr.db',
-      synchronize: true,
-      logging: true,
-      entities: [Csrep, Customer, Purchase, Vehicle],
-    }),
     ConfigModule.forRoot({
       isGlobal: true,
+      envFilePath: `.env.${process.env.NODE_ENV}`,
+    }),
+    TypeOrmModule.forRootAsync({
+      useFactory: (configService: ConfigService) => {
+        return {
+          type: 'better-sqlite3',
+          database: configService.get<string>('DB_LOCATION'),
+          synchronize: true,
+          logging: true,
+          entities: [Csrep, Customer, Purchase, Vehicle],
+        };
+      },
+      inject: [ConfigService],
     }),
     CsrepModule,
     CustomerModule,

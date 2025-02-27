@@ -14,7 +14,7 @@ import AuthGuard from 'src/auth/auth.guard';
 import Vehicle from './entities/vehicle.entity';
 
 @UseGuards(AuthGuard)
-@Controller('vehicle')
+@Controller('api/vehicle')
 export class VehicleController {
   constructor(private readonly vehicleService: VehicleService) {}
 

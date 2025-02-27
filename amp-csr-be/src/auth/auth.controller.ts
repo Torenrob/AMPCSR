@@ -1,9 +1,9 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post, Req } from '@nestjs/common';
 import AuthService, { CsRepSignIn } from './auth.service';
 import { CreateEditCsrepDto } from 'src/csrep/dto/create-csrep.dto';
 import ValidCsRepDto from 'src/csrep/dto/valid-csrep.dto';
 
-@Controller('auth')
+@Controller('api/auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 

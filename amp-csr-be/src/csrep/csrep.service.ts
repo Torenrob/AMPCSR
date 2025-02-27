@@ -122,9 +122,11 @@ export class CsrepService {
   }
 
   async findByUserName(user_name: string): Promise<Csrep | string> {
+    console.log(user_name);
+
     try {
-      const csRep = await this.csRepRepo.findOneByOrFail({
-        user_name: user_name,
+      const csRep = await this.csRepRepo.findOneOrFail({
+        where: { user_name: user_name },
       });
       return csRep;
     } catch (Err: unknown) {

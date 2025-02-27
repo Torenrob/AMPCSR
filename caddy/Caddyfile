@@ -1,0 +1,34 @@
+{
+  email sslcert@torenrob.dev
+}
+
+http://torenrob.dev, http://www.torenrob.dev {
+  redir https://{host}{uri} 308
+}
+
+localhost {
+  reverse_proxy /* amp-csr-fe:3000 {
+    header_up Host {host}
+    header_up Connection keep-alive
+  }
+
+  reverse_proxy /api/* amp-csr-be:4400 {
+    header_up Host {host}
+    header_up Connection keep-alive
+  }
+
+  tls internal
+}
+
+https://torenrob.dev, https://www.torenrob.dev {
+
+  reverse_proxy /amp-csr-be* amp-csr-be:4400 {
+    header_up Host {host}
+    header_up Connection keep-alive
+  }
+
+  reverse_proxy /* amp-csr-fe:3000 {
+    header_up Host {host}
+    header_up Connection keep-alive
+  }
+}

@@ -13,7 +13,7 @@ import EncryptionService from 'src/encryption/encryptionService';
 import { JwtService } from '@nestjs/jwt';
 
 export class CsRepSignIn {
-  username: string;
+  user_name: string;
   password: string;
 }
 
@@ -44,8 +44,10 @@ export default class AuthService {
   }
 
   async signIn(CsRepSignIn: CsRepSignIn): Promise<ValidCsRepDto> {
+    console.log(CsRepSignIn);
+
     const csRepByUserName: Csrep | string =
-      await this.csRepService.findByUserName(CsRepSignIn.username);
+      await this.csRepService.findByUserName(CsRepSignIn.user_name);
 
     //Will return string stating User or password incorrect
     if (typeof csRepByUserName === 'string') throw new UnauthorizedException();

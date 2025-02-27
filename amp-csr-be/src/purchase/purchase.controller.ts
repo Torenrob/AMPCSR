@@ -13,7 +13,7 @@ import CreateEditPurchaseDto from './dto/create-purchase.dto';
 import AuthGuard from 'src/auth/auth.guard';
 
 @UseGuards(AuthGuard)
-@Controller('purchase')
+@Controller('api/purchase')
 export class PurchaseController {
   constructor(private readonly purchaseService: PurchaseService) {}
 

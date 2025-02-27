@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useDarkModeStore } from "@/services/darkmodeprovider";
 import "./appsidebar.css";
 import CarIcon from "@/components/icons/caricon";
@@ -13,14 +13,23 @@ import RecentIcon from "@/components/icons/recenticon";
 import Switch from "@/components/shadcn/switch";
 import { SidebarHeader, SidebarContent, SidebarGroup, SidebarMenu, SidebarMenuItem, SidebarMenuButton, SidebarFooter, Sidebar } from "@/components/shadcn/sidebar";
 import { useRouter } from "next/navigation";
-import { Button } from "@/components/shadcn/button";
 import Cookies from "js-cookie";
-import { LogOutIcon } from "lucide-react";
+import LogOutModal from "./logoutmodal";
 
 export default function AppSideBar() {
 	const { darkMode, setDarkMode, getSystemPreference } = useDarkModeStore((state) => state);
 	const router = useRouter();
-	const { rep } = useContext(CSREP_CONTEXT);
+	const { rep, setRep } = useContext(CSREP_CONTEXT);
+	const [currentRoute, setCurrentRoute] = useState<string>(rep ? "/recent" : "/");
+
+	useEffect(() => {
+		setCurrentRoute(rep ? "/recent" : "/");
+	}, [rep, setCurrentRoute]);
+
+	const setRoute = (route: string) => {
+		setCurrentRoute(route);
+		router.push(route);
+	};
 
 	useEffect(() => getSystemPreference(), [getSystemPreference]);
 
@@ -31,7 +40,8 @@ export default function AppSideBar() {
 	const logOut = () => {
 		Cookies.remove("repToken");
 		Cookies.remove("repInfo");
-		router.push("/");
+		setRep(null);
+		setRoute("/");
 	};
 
 	const sidebarMenuItemStyle = "text-primary text-md mb-3";
@@ -55,19 +65,19 @@ export default function AppSideBar() {
 				<SidebarGroup>
 					<SidebarMenu>
 						<SidebarMenuItem>
-							<SidebarMenuButton className={`${sidebarMenuItemStyle}`} onClick={() => router.push("/recent")}>
+							<SidebarMenuButton className={`${sidebarMenuItemStyle} ${currentRoute === "/recent" ? "text-sidebar-ring" : ""}`} onClick={() => setRoute("/recent")}>
 								<RecentIcon />
 								<span>Recently Viewed</span>
 							</SidebarMenuButton>
-							<SidebarMenuButton className={`${sidebarMenuItemStyle}`} onClick={() => router.push("/users")}>
+							<SidebarMenuButton className={`${sidebarMenuItemStyle} ${currentRoute === "/users" ? "text-sidebar-ring" : ""}`} onClick={() => setRoute("/users")}>
 								<CustomerIcon />
 								<span>Users</span>
 							</SidebarMenuButton>
-							<SidebarMenuButton className={`${sidebarMenuItemStyle}`} onClick={() => router.push("/vehicles")}>
+							<SidebarMenuButton className={`${sidebarMenuItemStyle} ${currentRoute === "/vehicles" ? "text-sidebar-ring" : ""}`} onClick={() => setRoute("/vehicles")}>
 								<CarIcon />
 								<span>Vehicles</span>
 							</SidebarMenuButton>
-							<SidebarMenuButton className={`${sidebarMenuItemStyle}`} onClick={() => router.push("/purchase")}>
+							<SidebarMenuButton className={`${sidebarMenuItemStyle} ${currentRoute === "/purchase" ? "text-sidebar-ring" : ""}`} onClick={() => setRoute("/purchase")}>
 								<PurchaseIcon />
 								<span>Purchase History</span>
 							</SidebarMenuButton>
@@ -76,14 +86,7 @@ export default function AppSideBar() {
 				</SidebarGroup>
 			</SidebarContent>
 			<SidebarFooter className="z-10 flex flex-col">
-				{rep ? (
-					<Button className="bg-sidebar-ring" onClick={logOut}>
-						<LogOutIcon />
-						<span id="logOutText">Log Out</span>
-					</Button>
-				) : (
-					""
-				)}
+				{rep ? <LogOutModal logout={logOut} /> : ""}
 				<Switch id="darkLightMode" className="self-center mb-4" checked={darkMode} onCheckedChange={handleCheckChange} />
 			</SidebarFooter>
 			{!rep && <div className="absolute h-full w-full bg-black/50 z-0"></div>}

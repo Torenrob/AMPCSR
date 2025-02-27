@@ -123,7 +123,9 @@ export default function AddItemModal({
 							type="submit"
 							onClick={() => {
 								if (form.formState.isValid) {
-									setOpen(false);
+									do {
+										setOpen(false);
+									} while (open);
 								}
 							}}
 							className="w-[30%] self-center bg-sidebar-ring">
