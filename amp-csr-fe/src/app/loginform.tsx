@@ -51,7 +51,7 @@ export default function LoginForm({ showRegister }: { showRegister: () => void }
 
 	return (
 		<Form {...form}>
-			<form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-2 bg-sidebar w-[20%] p-3 rounded-2xl h-fit border-[1px] border-sidebar-border shadow-2xl shadow-background">
+			<form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-2 bg-sidebar w-[20%] p-3 rounded-2xl h-fit border-[1px] border-sidebar-border shadow-2xl dark:shadow-background">
 				<span className="self-center text-xl text-primary/50 font-semibold">Employee Login</span>
 				<FormField
 					control={form.control}

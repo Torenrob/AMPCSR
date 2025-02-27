@@ -17,6 +17,8 @@ The AMP CSR Portal aims to provide customer service representatives with a compr
 
 ## Technology Stack
 
-- **Frontend**: React, Redux, HTML, CSS
-- **Backend**: Nest
-- **Database**: MySQL
+- **Frontend**: React, Redux, React Query, Tailwind CSS, TypeScript
+- **Backend**: NestJS, TypeORM
+- **Database**: SQLite
+- **Authentication**: JWT (JSON Web Tokens)
+- **Deployment**: Docker Compose, HostingerVPS
