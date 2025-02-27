@@ -29,8 +29,8 @@ export default function AddItemModal({
 	mutation: UseMutationResult<any, Error, any, unknown>;
 	form: UseFormReturn<z.infer<any>>;
 	schema: z.ZodObject<any>;
-	open: boolean;
-	setModalOpen: () => void;
+	open?: boolean;
+	setModalOpen?: () => void;
 }) {
 	const keys = Object.keys(schema.shape);
 
