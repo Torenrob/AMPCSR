@@ -1,0 +1,51 @@
+services:
+  amp-csr-be:
+    build:
+      context: ./amp-csr-be
+      dockerfile: Dockerfile
+    container_name: amp-csr-be
+    ports:
+      - "4400:4400"
+    volumes:
+      - sqlite_data:/usr/app/database
+    networks:
+      - amp-csr-network
+
+  amp-csr-fe:
+    build:
+      context: ./amp-csr-fe
+      dockerfile: Dockerfile
+    container_name: amp-csr-fe
+    ports:
+      - "3000:3000"
+    networks:
+      - amp-csr-network
+
+  caddy:
+    build:
+      context: ./caddy
+      dockerfile: Dockerfile
+    container_name: amp-caddy
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - caddy_data:/data
+      - caddy_config:/config
+    networks:
+      - amp-csr-network
+    depends_on:
+      - amp-csr-be
+      - amp-csr-fe
+
+networks:
+  amp-csr-network:
+    driver: bridge
+
+volumes:
+  caddy_data:
+    driver: local
+  caddy_config:
+    driver: local
+  sqlite_data:
+    driver: local
